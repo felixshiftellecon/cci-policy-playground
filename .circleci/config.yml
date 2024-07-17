@@ -14,7 +14,7 @@ jobs:
   two:
     executor: default_executor
     steps:
-      - run: echo "hello john!"
+      - run: echo $something
   three:
     executor: default_executor
     steps:
