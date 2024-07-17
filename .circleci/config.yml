@@ -28,8 +28,6 @@ workflows:
       - two:
           requires:
             - one
-          context:
-            - SENSITIVE_CONTEXT
       - three:
           context:
             - SENSITIVE_CONTEXT
