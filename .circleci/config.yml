@@ -1,14 +1,38 @@
-version: 2.1
+version : 2.1
+
+executors:
+  default_executor:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
 
 jobs:
-  job_a:
-    macos:
-      xcode: 15.0
-    resource_class: macos.m1.large.gen1
+  one:
+    executor: default_executor
     steps:
-      - run: echo "Run job a"
+      - run: echo "hello john"
+  two:
+    executor: default_executor
+    steps:
+      - run: echo "hello john"
+  three:
+    executor: default_executor
+    steps:
+      - run: echo "hello john"
+
 
 workflows:
-  workflow-a:
+  workflow:
     jobs:
-      - job_a
+      - one
+      - two:
+          requires:
+            - one
+      - three:
+          context:
+            - SENSITIVE_CONTEXT
+          filters:
+            branches:
+              only: /^main$/
+          requires:
+            - two
