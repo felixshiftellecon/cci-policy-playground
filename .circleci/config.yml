@@ -1,38 +1,24 @@
-version : 2.1
+version: 2.1
+
+# Soft-fail policy fixture: pin circleci/path-filtering to an old version (0.1.0)
+# This should trigger the `upgrade_path_filtering_orb` SOFT_FAIL policy on the org.
+
+orbs:
+  path-filtering: circleci/path-filtering@0.1.0
 
 executors:
-  default_executor:
+  base:
     docker:
-      - image: cimg/base:current
-    resource_class: small
+      - image: cimg/base:stable
 
 jobs:
-  one:
-    executor: default_executor
+  policy-fixture-noop:
+    executor: base
+    resource_class: small
     steps:
-      - run: echo "hello john"
-  two:
-    executor: default_executor
-    steps:
-      - run: echo "hello john"
-  three:
-    executor: default_executor
-    steps:
-      - run: echo $something
-
+      - run: echo "path-filtering orb literal pin 0.1.0"
 
 workflows:
-  workflow:
+  policy_fixture:
     jobs:
-      - one
-      - two:
-          requires:
-            - one
-      - three:
-          context:
-            - SENSITIVE_CONTEXT
-          filters:
-            branches:
-              only: /^main$/
-          requires:
-            - two
+      - policy-fixture-noop
